@@ -1,0 +1,11 @@
+module SignExtensionUnit(
+    input wire [15:0] input16, // 16비트 입력 데이터
+    output reg [31:0] output32  // 32비트 확장된 데이터
+);
+
+    always @* begin
+        // 가장 상위 비트(15번 비트)를 복사하여 16비트에서 32비트로 확장
+        output32 = {{16{input16[15]}}, input16};
+    end
+
+endmodule
