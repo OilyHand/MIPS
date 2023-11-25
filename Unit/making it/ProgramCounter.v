@@ -1,24 +1,29 @@
 module ProgramCounter(
-    input wire clk,        // 클럭 신호
-    input wire rst,        // 리셋 신호
-    input wire [31:0] jumpAddress, // 분기 목적지 주소
-    input wire branch,     // 분기 여부
-    input wire branchCondition, // 분기 조건
-    output reg [31:0] pc    // 프로그램 카운터 레지스터
+    input wire clk,        // 클락 신호
+    
+    input wire [31:0] branchAddress, // branch 목적지 주소
+    input wire branch,     // branch 여부
+    
+    input wire [31:0] jumpAddress,   // jump 목적지 주소
+    input wire jump,       // jump 여부
+    
+    input wire [31:0] PCWriteValue,  // PC에 쓰여질 값
+    input wire PCWrite,    // Control unit
+    
+    output reg [31:0] pc    // 현재 PC 값
 );
 
-    // 클럭 상승 에지에서 동작
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            // 리셋 신호가 활성화되면 0으로 초기화
-            pc <= 32'h0;
-        end else if (branch && branchCondition) begin
-            // 분기 신호가 활성화되고 분기 조건이 참이면 분기 주소로 업데이트
-            pc <= jumpAddress;
-        end else begin
-            // 다음 주소로 증가
-            pc <= pc + 4; // 명령어의 크기가 4바이트일 때
-        end
+    always @(posedge clk) begin
+        if (jump)          // jump 활성화
+            pc <= jumpAddress;  // jump 목적지 주소 넣기
+        
+        else if (branch)   // branch 활성화
+            pc <= pc + branchAddress;  // branch 목적지 주소로 이동
+        
+        else if (PCWrite)  // PCwrite Control unit이 활성화되면
+            pc <= PCWriteValue;  // 그 값으로 pc 덮어쓰기
+        else
+            pc <= pc + 4;   // 전부 아니면 4 증가
     end
 
 endmodule
