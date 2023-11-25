@@ -18,23 +18,23 @@ module MIPS_Stage1(
     );
 
   
-    // Instruction Memory (실제 메모리 대신 간단한 배열을 사용)
-    reg [31:0] memory [0:255];  // 256개의 명령어 메모리
-    initial begin
-        // 메모리에 임의의 초기 명령어를 기입.
-        memory[0] = 32'h8c000001;  // lw $0, 1($0)
-        memory[1] = 32'h20020002;  // add $0, $1, $2
-        // 더 많은 명령어를 추가가능
-    end
-
-    assign inst = memory[pc >> 2];  // 현재 주소에서 명령어를 읽습니다.
-
-
-  
-    Adder U1 (
-        .operandA(pc),
-        .operandB(4),  // 다음 명령어의 주소는 현재 주소 + 4
-        .sum(pc)
+    InstructionMemory U1 (
+        .clk(clk),
+        .address(pc),
+        .instruction(inst)
     );
 
+
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            // 리셋 신호가 활성화되면 초기값으로 리셋
+            pc <= 32'h0;
+        end else begin
+            // 리셋이 아니면 PC 값을 업데이트
+            pc <= U0.pc;
+        end
+    end
+
 endmodule
+
+
