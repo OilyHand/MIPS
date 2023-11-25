@@ -13,8 +13,9 @@ module InstructionMemory(
 
     // 명령어 메모리 초기화 (프로젝트에 따라 필요할 수 있음)
     initial begin
-        // 메모리를 0으로 초기화하거나 초기 프로그램을 적재할 수 있음
-        // 예: memory[0] = 32'hDEADBEEF;
+        // 임의의 메모리 기입
+        memory[0] = 32'h8c000001;  // lw $0, 1($0)
+        memory[1] = 32'h20020002;  // add $0, $1, $2
     end
 
 endmodule
