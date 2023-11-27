@@ -26,7 +26,7 @@ module MIPS_Stage1(
     output reg [31:0] pc,   // PC
     output reg [31:0] inst  // instruction
 );
-reg  [31:0] pc_inner; //register를 바로 output에 연결 할 수 없기에 새로운 변수 생성
+    reg  [31:0] pc_inner; // register를 바로 output에 연결 할 수 없기에 새로운 변수 생성
 
   
     ProgramCounter U0 (
@@ -56,7 +56,8 @@ reg  [31:0] pc_inner; //register를 바로 output에 연결 할 수 없기에 �
             pc <= 32'h0;
         end else begin
             // 리셋이 아니면 PC 값을 업데이트
-            pc <= U0.pc_inner; //이제 wire pc에 값을 주고 output으로 갈 수 있게 함.
+            pc <= U0.pc_inner;
+            // 이제 wire pc에 값을 주고 output으로 갈 수 있게 함.
         end
     end
 
