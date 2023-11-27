@@ -21,29 +21,6 @@
 
 // synthesis, Implementation 통과
 
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 2023/11/27 23:04:58
-// Design Name: 
-// Module Name: MIPS_Stage1
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
-// synthesis, Implementation 통과
-
 module MIPS_Stage1(
     input wire clk,
     input wire rst,
@@ -61,7 +38,7 @@ module MIPS_Stage1(
         .jump(0),
         .PCWriteValue(0), // pc를 control과 연결하지 않을 경우 빼기
         .PCWrite(1),
-        .pc(pc) // 중간 변수에 연결
+        .pc(pc)
     );
 
     Adder U2 (
