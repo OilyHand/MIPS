@@ -1,3 +1,25 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 2023/11/27 23:03:13
+// Design Name: 
+// Module Name: ProgramCounter
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
 module ProgramCounter(
     input wire clk,        // 클락 신호
     
@@ -22,8 +44,6 @@ module ProgramCounter(
         
         else if (PCWrite)  // PCwrite Control unit이 활성화되면
             pc <= PCWriteValue;  // 그 값으로 pc 덮어쓰기
-        else
-            pc <= pc + 4;   // 전부 아니면 4 증가
     end
 
 endmodule
