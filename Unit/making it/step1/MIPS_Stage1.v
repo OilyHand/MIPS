@@ -19,6 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
+// synthesis, Implementation 통과
 
 module MIPS_Stage1(
     input wire clk,
@@ -35,7 +36,7 @@ module MIPS_Stage1(
         .branch(0),
         .jumpAddress(0),
         .jump(0),
-        .PCWriteValue(0),
+        .PCWriteValue(0), // pc를 control과 연결하지 않을 경우 빼기
         .PCWrite(1),
         .pc(pc_internal) // 중간 변수에 연결
     );
@@ -46,7 +47,7 @@ module MIPS_Stage1(
         .instruction(inst)
     );
 
-    always @(posedge clk or posedge rst) begin
+    always @(posedge clk or posedge rst) begin // negedge rst 사용하는 것도 고려해보기
         if (rst) begin
             // 리셋 신호가 활성화되면 초기값으로 리셋
             pc <= 32'h0;
