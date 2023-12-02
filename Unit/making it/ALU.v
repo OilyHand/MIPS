@@ -6,23 +6,34 @@ module ALU(
     output reg zeroFlag,          // 결과가 0인지 여부를 나타내는 플래그
     output reg negativeFlag      // 결과가 음수인지 여부를 나타내는 플래그
 );
+    
+// new version
+// ALU control bit field -> ALUop = { ainvert, binvert, select[1], select[0] }
+// select is result MUX select signal
+// select == 2'b00 :: and gate to result
+// select == 2'b01 :: or gate to result
+// select == 2'b10 :: adder to result
+// select == 2'b11 :: less to result
 
     always @(operandA or operandB or aluControl) begin
-        case (aluControl)
-            3'b000: result = operandA + operandB; // 덧셈
-            3'b001: result = operandA - operandB; // 뺄셈
-            3'b010: result = operandA & operandB; // AND
-            3'b011: result = operandA | operandB; // OR
-            3'b100: result = operandA ^ operandB; // XOR
-            // 다른 동작 추가 가능
-            default: result = 32'h0; // 기본적으로 0으로 설정
+        casex (aluControl)
+            4'b0000: result = operandA & operandB; // and
+            4'b0001: result = operandA | operandB; // or
+            4'b0010: result = operandA + operandB; // add
+            4'b011x: begin 
+                         result = operandA - operandB; // sub or slt
+                         if(aluControl[1:0] == 2'b11) // slt
+                            if(negativeFlag)
+                                result = 32'd1;
+                            else
+                                result = 32'd0;
+                     end 
+            4'b1100: result = ~(operandA | operandB); // nor
+            default: result = 32'h0;
         endcase
-
-        // 결과가 0인지 여부 확인
-        zeroFlag = (result == 32'h0);
-
-        // 결과가 음수인지 여부 확인
-        negativeFlag = (result[31] == 1);
     end
-
+    
+    assign zeroFlag = (result == 32'h0);
+    assign negativeFlag = (result[31] == 1);
+    
 endmodule
