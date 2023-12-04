@@ -21,14 +21,13 @@
 
 
 module ID_Stage(
-    input wire IFtoID_clk,
-    input wire IFtoID_rst,
+    input wire clk,
+    input wire rst,
     input wire [31:0] IFtoID_PC,
     input wire [31:0] IFtoID_inst,
     
     output wire [31:0] IDtoEX_PC,
-    output wire [31:0] IDtoEX_ReadData1,
-    output wire [31:0] IDtoEX_ReadData2,
+    output wire [31:0] IDtoEX_ReadData1, IDtoEX_ReadData2,
     output wire [31:0] IDtoEX_Imm,
     output wire [5:0] IFtoID_Rs,    //25:21
     output wire [5:0] IFtoID_Rt,    //20:16
