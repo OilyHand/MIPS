@@ -21,7 +21,7 @@
 
 // synthesis, Implementation 통과
 
-module MIPS_Stage1(
+module IF_Stage(
     input wire clk,
     input wire rst,
     output wire [31:0] pc,
@@ -30,7 +30,7 @@ module MIPS_Stage1(
     reg [31:0] pc_reg; // 중간 변수 추가
     wire [31:0] add_result;
 
-    ProgramCounter U0 (
+    ProgramCounter u0 (
         .clk(clk),
         .branchAddress(0),
         .branch(0),
@@ -38,16 +38,16 @@ module MIPS_Stage1(
         .jump(0),
         .PCWriteValue(0), // pc를 control과 연결하지 않을 경우 빼기
         .PCWrite(1),
-        .pc(pc)
+        .pc(pc) // 중간 변수에 연결
     );
 
-    Adder U2 (
+    Adder u2 (
         .operandA(pc),
         .operandB(4),
         .sum(add_result)
     );
 
-    InstructionMemory U1 (
+    InstructionMemory u1 (
         .clk(clk),
         .address(pc),
         .instruction(inst)
