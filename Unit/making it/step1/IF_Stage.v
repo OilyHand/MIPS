@@ -5,7 +5,7 @@
 // 
 // Create Date: 2023/11/27 23:04:58
 // Design Name: 
-// Module Name: MIPS_Stage1
+// Module Name: IF_Stage
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -24,8 +24,8 @@
 module IF_Stage(
     input wire clk,
     input wire rst,
-    output wire [31:0] pc,
-    output wire [31:0] inst
+    output wire [31:0] IFtoID_PC,
+    output wire [31:0] IFtoID_inst
 );
     reg [31:0] pc_reg; // 중간 변수 추가
     wire [31:0] add_result;
@@ -38,19 +38,19 @@ module IF_Stage(
         .jump(0),
         .PCWriteValue(0), // pc를 control과 연결하지 않을 경우 빼기
         .PCWrite(1),
-        .pc(pc) // 중간 변수에 연결
+        .pc(IFtoID_PC) // 중간 변수에 연결
     );
 
     Adder u2 (
-        .operandA(pc),
+        .operandA(IFtoID_PC),
         .operandB(4),
         .sum(add_result)
     );
 
     InstructionMemory u1 (
         .clk(clk),
-        .address(pc),
-        .instruction(inst)
+        .address(IFtoID_PC),
+        .instruction(IFtoID_inst)
     );
     
 
@@ -60,11 +60,11 @@ module IF_Stage(
             pc_reg <= 32'h0;
         end else begin
             // 리셋이 아니면 PC 값을 업데이트
-            pc_reg <= U2.sum;
+            pc_reg <= u2.sum;
         end
     end
     
-    assign pc = pc_reg;
+    assign IFtoID_PC = pc_reg;
 
 
 endmodule
