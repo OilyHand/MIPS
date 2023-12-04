@@ -5,7 +5,7 @@
 // 
 // Create Date: 2023/11/27 23:28:40
 // Design Name: 
-// Module Name: MIPS_Stage2
+// Module Name: ID_Stage
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
