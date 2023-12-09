@@ -1,6 +1,6 @@
 module Hazard_Detection(
     input ID_EX_MemRead,
-    input [31:0] ID_EX_Rt, IF_ID_Rs, IF_ID_Rt, 
+    input [4:0] ID_EX_Rt, IF_ID_Rs, IF_ID_Rt, 
     output reg PCWrite, IF_ID_Write, Stall
     );
     

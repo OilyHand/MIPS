@@ -1,6 +1,6 @@
 module Forward_Unit(
-    input [31:0] EX_MEM_Rd, MEM_WB_Rd,
-    input [31:0] ID_EX_Rs, ID_EX_Rt,
+    input [4:0] EX_MEM_Rd, MEM_WB_Rd,
+    input [4:0] ID_EX_Rs, ID_EX_Rt,
     input MEM_WB_RegWrite, EX_MEM_RegWrite,
     output reg [1:0] ForwardA, ForwardB
     );

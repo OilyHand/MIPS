@@ -4,7 +4,7 @@ module MEMtoWB_Register (
     // datapath input
     input wire [31:0] MEM_ReadData,
     input wire [31:0] MEM_ALU_result,
-    input wire [31:0] MEM_RegDest,
+    input wire [4:0] MEM_RegDest,
 
     // control input
     input wire MEM_MemtoReg,
@@ -13,7 +13,7 @@ module MEMtoWB_Register (
     // datapath output
     output reg [31:0] MEMtoWB_ReadData,
     output reg [31:0] MEMtoWB_ALU_result,
-    output reg [31:0] MEMtoWB_RegDest,
+    output reg [4:0] MEMtoWB_RegDest,
 
     // control output
     output reg MEMtoWB_MemtoReg,

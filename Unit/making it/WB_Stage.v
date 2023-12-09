@@ -2,7 +2,7 @@ module WB_Stage(
     // datapath input
     input wire [31:0] MEMtoWB_ReadData,
     input wire [31:0] MEMtoWB_ALU_result,
-    input wire [31:0] MEMtoWB_RegDest,
+    input wire [4:0] MEMtoWB_RegDest,
 
     // control input
     input wire MemtoReg,
