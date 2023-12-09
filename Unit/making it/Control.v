@@ -27,7 +27,7 @@ always @* begin
             
         else if (opcode == 6'b101011) begin // SW instrtuction       
             ALUSrc <= 1'b1;
-            MemWrite <= 1; end
+            MemWrite <= 1'b1; end
             
         else if (opcode == 6'b000100) begin // BEQ instruction      
             ALUOp <= 1'b1;
