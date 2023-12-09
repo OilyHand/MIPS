@@ -17,7 +17,7 @@ module Mux_32(
     input [4:0] Sel
     );
     
-    always @(Sel)
+    always @(*)
       case(Sel)
         0: Y = X0;
         1: Y = X1;
