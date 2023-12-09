@@ -1,16 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-// Module Name: RegisterFile
-// Description: 
-//
-// Ports: 
-//   - RD1, RD2: Read Data 1, Read Data 2
-//   - RR!, RR2: Read Register 1, Read Register 2
-//   - WR: Write Register
-//   - WD: Write Data
-//   - WriteReg: WriteReg control signal
-//   - clk: clock
-///////////////////////////////////////////////////////////////////////////////
-
 module RegisterFile(RD1, RD2, RR1, RR2, WR, WD, WriteReg, clk);
     output [31:0] RD1, RD2;
     input [4:0] RR1, RR2, WR; 
