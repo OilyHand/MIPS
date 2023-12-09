@@ -1,4 +1,4 @@
-module MIPS (
+module MIPS_top (
     input wire clk,
     input wire rst);
 
@@ -8,6 +8,9 @@ module MIPS (
     IF_Stage U0 (
         .clk(clk),
         .rst(rst),
+        .PCWrite(/*Hazard Detection unit으로 부터 받을 것*/),
+        .PCSrc(/* MEM으로 부터 받을 것*/),
+        .Branch(/* EX/MEM 으로 부터 받을 것*/),
         .IFtoID_PC(pc_stage1),
         .IFtoID_inst(inst_stage1)
     );
