@@ -24,10 +24,10 @@ module EX_Stage(
     // datapath output
     output wire zero,
     output wire [31:0] ALUresult,
-    output wire [31:0] EX_Rt,
+    output wire [4:0] EX_Rt,
     output wire [31:0] Branch_Addr, // computed branch address
     output wire [31:0] Jump_address, // computed jump address
-    output wire [31:0] RegDest // Write data destination
+    output wire [5:0] RegDest // Write data destination
     
 );
     
@@ -42,7 +42,7 @@ module EX_Stage(
     Adder add_address (.operandA(IDtoEX_PCadd4), .operandB(SL2_out), .sum(Branch_Addr));
 
     // Jump address computation (Psudo-direct addressing)
-    assign shift_address = { j_address, 2'b00 };
+    assign shift_address = j_address << 2;
     assign Jump_address = { IDtoEX_PCadd4[31:28], shift_address };
 
     // ALU Control
@@ -78,7 +78,7 @@ module EX_Stage(
     );
 
     // Select Destination Register for writing data
-    Mux_2 mux_RegDst (.X0(IDtoEX_Rt), .X1(IDtoEX_Rd), .sel(RegDst), .Y(RegDest));
+    Mux5_2 mux_RegDst (.X0(IDtoEX_Rt), .X1(IDtoEX_Rd), .sel(RegDst), .Y(RegDest));
     
     assign EX_Rt = FWB_out;
 

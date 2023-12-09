@@ -4,9 +4,9 @@ module EXtoMEM_Register(
     // datapath input
     input wire EX_zero,
     input wire [31:0] EX_ALUresult,
-    input wire [31:0] EX_Rt,
+    input wire [4:0] EX_Rt,
     input wire [31:0] EX_Branch_Addr,
-    input wire [31:0] EX_RegDest,
+    input wire [4:0] EX_RegDest,
     input wire [31:0] EX_Jump_address,
 
     // control input
@@ -21,10 +21,10 @@ module EXtoMEM_Register(
     // datapath output
     output reg EXtoMEM_zero,
     output reg [31:0] EXtoMEM_ALUresult,
-    output reg [31:0] EXtoMEM_Rt,
+    output reg [4:0] EXtoMEM_Rt,
     output reg [31:0] EXtoMEM_Branch_Addr,
     output reg [31:0] EXtoMEM_Jump_address,
-    output reg [31:0] EXtoMEM_RegDest
+    output reg [4:0] EXtoMEM_RegDest
     
     // control output
     output reg MEM_Branch,
