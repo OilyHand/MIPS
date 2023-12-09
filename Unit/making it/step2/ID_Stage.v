@@ -4,16 +4,18 @@ module ID_Stage(
     input wire [31:0] IFtoID_PC,
     input wire [31:0] IFtoID_inst,
     
+    input wire [4:0] writeReg,
+    input wire [31:0] writeData,
+    input wire RegWrite,
+    
     output wire [31:0] IDtoEX_PC,
     output wire [31:0] IDtoEX_ReadData1, IDtoEX_ReadData2,
     output wire [31:0] IDtoEX_Imm,
-    output wire [5:0] IFtoID_Rs,    //25:21
-    output wire [5:0] IFtoID_Rt,    //20:16
-    output wire [5:0] IFtoID_Rd     //15:11
-
-/*    input wire [4:0] writeReg,
-    input wire [31:0] writeData,
-    input wire RegWrite */
+    output wire [5:0] IFtoID_Op,    //31:26
+    output wire [4:0] IFtoID_Rs,    //25:21
+    output wire [4:0] IFtoID_Rt,    //20:16
+    output wire [4:0] IFtoID_Rd,    //15:11
+    output wire [25:0] jump_instruction //25:0
 );
 
     // Register File
@@ -21,26 +23,18 @@ module ID_Stage(
     wire [4:0] RR1, RR2, WR;
     wire [31:0] WD;
     wire WriteReg;
+    
     wire [31:0] imm; // using sign extension
-    wire ALUSrc, RegDst, Branch, MemRead, Memwrite, RegWrite, RegWrite, MemtoReg, PCSrc;
-    wire [1:0] ALUOp;
-    
-    Control u0 (
-        .hazard_detected(/*stall*/),
-        .opcode(IFtoID_inst[31:26]),
-        .ALUSrc(ALUSrc),
-        .RegDst(RegDst),
-        .ALUOp(ALUOp),
-        .Branch(Branch),
-        .MemRead(MemRead),
-        .MemWrite(MemWrite),
-        .RegWrite(RegWrite),
-        .MemtoReg(MemtoReg),
-        .PCSrc(PCSrc)
-    );
+   
+    // Instruction Decode
+    assign RR1 = IFtoID_inst[25:21];
+    assign RR2 = IFtoID_inst[20:16];   
+    assign WR = writeReg;
+    assign WD = writeData;
+    assign WriteReg = RegWrite;
     
     
-    RegisterFile u1 (
+    RegisterFile u0 (
         .RD1(RD1),
         .RD2(RD2),
         .RR1(RR1),
@@ -52,33 +46,22 @@ module ID_Stage(
     );
 
 
-    SignExt u2 (
+    SignExt u1 (
         .Y(imm),
         .X(IFtoID_inst[15:0])
     );
 
 
-    // Instruction Decode
-    assign RR1 = IFtoID_inst[25:21];
-    assign RR2 = IFtoID_inst[20:16];
-    assign WR = IFtoID_inst[15:11];
-    assign WriteReg = (IFtoID_inst[31:26] == 6'b00000) ? 0 : 1; // R-type일 때 WriteReg 활성화
-
-
-    // Mux for Write Data
-    assign WD = (IFtoID_inst[31:26] == 6'b00000) ? IDtoEX_ReadData2 : imm;
-
-
     // Output
+ 
     assign IDtoEX_PC = IFtoID_PC;
     assign IDtoEX_ReadData1 = RD1;
     assign IDtoEX_ReadData2 = RD2;
-    assign IDtoEX_imm = imm;
+    assign IDtoEX_Imm = imm;
+    
+    assign IFtoID_Op = IFtoID_inst[31:26];   
     assign IFtoID_Rs = IFtoID_inst[25:21];
     assign IFtoID_Rt = IFtoID_inst[20:16];
     assign IFtoID_Rd = IFtoID_inst[15:11];
-/*    assign writeReg = WR;
-    assign writeData = WD;
-    assign RegWrite = WriteReg;
-*/
+    
 endmodule
