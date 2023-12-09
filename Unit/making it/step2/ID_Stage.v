@@ -15,7 +15,9 @@ module ID_Stage(
     output wire [4:0] IFtoID_Rs,    //25:21
     output wire [4:0] IFtoID_Rt,    //20:16
     output wire [4:0] IFtoID_Rd,    //15:11
-    output wire [25:0] jump_instruction //25:0
+  //output wire [25:0] jump_instruction //25:0
+    
+    output wire [5:0] funct
 );
 
     // Register File
@@ -63,5 +65,6 @@ module ID_Stage(
     assign IFtoID_Rs = IFtoID_inst[25:21];
     assign IFtoID_Rt = IFtoID_inst[20:16];
     assign IFtoID_Rd = IFtoID_inst[15:11];
+    assign funct = IFtoID_inst[5:0];
     
 endmodule
