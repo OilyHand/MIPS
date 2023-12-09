@@ -1,4 +1,4 @@
-module MIPS_top (
+module MIPS (
     input wire clk,
     input wire rst);
 
@@ -29,8 +29,9 @@ module MIPS_top (
     wire [31:0] readData1_stage2;
     wire [31:0] readData2_stage2;
     wire [31:0] signExtended_stage2;
-    wire [5:0] IFtoID_Op;
-    wire [4:0] IFtoID_Rs, IFtoID_Rt, IFtoID_Rd;
+    wire [5:0] Op_stage2;
+    wire [4:0] Rs_stage2, Rt_stage2, Rd_stage2;
+    wire [5:0] funct_stage2;
 
     ID_Stage U2 (
         .clk(clk),
@@ -45,11 +46,13 @@ module MIPS_top (
         .IDtoEX_ReadData1(readData1_stage2),
         .IDtoEX_ReadData2(readData2_stage2),
         .IDtoEX_Imm(signExtended_stage2),
-        .IFtoID_Op(IFtoID_Op),
-        .IFtoID_Rs(IFtoID_Rs),
-        .IFtoID_Rt(IFtoID_Rt),
-        .IFtoID_Rd(IFtoID_Rd)
+        .IFtoID_Op(Op_stage2),
+        .IFtoID_Rs(Rs_stage2),
+        .IFtoID_Rt(Rt_stage2),
+        .IFtoID_Rd(Rd_stage2),
+        .funct(funct_stage2)
     );
+
 
     wire hazard_detected;
     wire [5:0] opcode;
@@ -58,7 +61,7 @@ module MIPS_top (
 
     Control U3 (
         .hazard_detected(hazard_detected),
-        .opcode(IFtoID_Op),
+        .opcode(Op_stage2),
         .ALUOp(Control_ALUOp),
         .ALUSrc(Control_ALUSrc),
         .RegDst(Control_RegDst),
@@ -68,6 +71,62 @@ module MIPS_top (
         .RegWrite(Control_RegWrite),
         .MemtoReg(Control_MemtoReg),
         .PCSrc(Control_PCSrc)
+    );
+
+
+    wire [31:0] pc_stage3;
+    wire [31:0] readData1_stage3;
+    wire [31:0] readData2_stage3;
+    wire [31:0] signExtended_stage3;
+    wire [4:0] Rs_stage3, Rt_stage3, Rd_stage3;
+    wire [5:0] funct_stage3;
+    
+    wire [1:0] IDtoEX_ALUOp;
+    wire IDtoEX_ALUSrc, IDtoEX_RegDst, IDtoEX_Branch, IDtoEX_MemRead, IDtoEX_MemWrite, IDtoEX_RegWrite, IDtoEX_MemtoReg, IDtoEX_PCSrc;
+    
+
+    IDtoEX_Register U4 (
+    .clk(clk),
+    .rst(rst),
+    
+    //input from ID_Stage
+    .IFtoID_PC(pc_stage2),
+    .IFtoID_ReadData1(readData1_stage2), .IFtoID_ReadData2(readData2_stage2),
+    .IFtoID_Imm(signExtended_stage2),
+    .IFtoID_Rs(Rs_stage2), .IFtoID_Rt(Rt_stage2), .IFtoID_Rd(Rd_stage2),
+    .funct(funct_stage2),
+ 
+ 
+    //input from Control
+    .ALUOp(Control_ALUOp), .ALUSrc(Control_ALUSrc), .RegDst(Control_RegDst), .Branch(Control_Branch),
+    .MemRead(Control_MemRead), .MemWrite(Control_MemWrite), .RegWrite(Control_RegWrite), .MemtoReg(Control_MemtoReg), .PCSrc(Control_PCSrc),
+ 
+ 
+    // outputs to EX_Stage
+    .IDtoEX_PC(pc_stage3), // Program Counter
+    .IDtoEX_ReadData1(readData1_stage3),.IDtoEX_ReadData2(readData2_stage3), // Read Data from Register File
+    .IDtoEX_Imm(signExtended_stage3), // Sign extended immediate value
+    .IDtoEX_Rt(Rt_stage3), .IDtoEX_Rd(Rd_stage3), // Destination Register
+
+
+    // Control unit to use in 3 stage
+    .EX_ALUOp(IDtoEX_ALUOp),
+    .EX_ALUSrc(IDtoEX_ALUSrc),
+    .EX_RegDst(IDtoEX_RegDst),
+    
+    
+    // outputs to Forwarding unit
+    .Forwarding_Rs(Rs_stage3),
+    
+    
+    // outputs to ALUcontrol
+    .ALUcontrol_funct(funct_stage3), // Function code
+    
+    
+    // outputs to next pipe
+    .IDtoEX_Branch(IDtoEX_Branch), .IDtoEX_MemRead(IDtoEX_MemRead), .IDtoEX_MemWrite(IDtoEX_MemWrite),     // stage 4에서 사용
+    .IDtoEX_RegWrite(IDtoEX_RegWrite), .IDtoEX_MemtoReg(IDtoEX_MemtoReg), .IDtoEX_PCSrc(IDtoEX_PCSrc)      // stage 5에서 사용
+    
     );
 
 endmodule

@@ -8,7 +8,7 @@ module Decoder_2to4(
     if(En)
       case(X)
         0: Y = 2'b01;
-        1: Y = 2'b10;
+        default: Y = 2'b10;
       endcase
     else
       Y = 0;
