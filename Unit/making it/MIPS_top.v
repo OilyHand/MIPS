@@ -1,13 +1,9 @@
-module MIPS_top (
+module MIPS (
     input wire clk,
     input wire rst);
-    
-
 
     wire [31:0] pc_stage1;
     wire [31:0] inst_stage1;
-
-
 
     IF_Stage U0 (
         .clk(clk),
@@ -17,11 +13,8 @@ module MIPS_top (
     );
 
 
-
     wire [31:0] pc_IFID;
     wire [31:0] inst_stage2;
-
-
 
     IFtoID_Register U1 (
         .clk(clk),
@@ -32,55 +25,48 @@ module MIPS_top (
         .ID_inst(inst_stage2)
     );
 
-
-
-    wire [31:0] pc_stage2;
-    wire [31:0] readData1_stage2;
-    wire [31:0] readData2_stage2;
-    wire [31:0] signExtended_stage2;
-    wire [4:0] writeReg_stage2;
-    wire [31:0] writeData_stage2;
-    
-    wire ALUSrc_stage2;
-    wire [1:0] ALUOp_stage2;
-    wire RegDst_stage2;
-    wire Branch_stage2;
-    wire MemRead_stage2;
-    wire MemWrite_stage2;
-    wire RegWrite_stage2;
-    wire MemtoReg_stage2;
-    wire PCSrc_stage2;
+    wire [31:0] pc_stage3;
+    wire [31:0] IDtoEX_ReadData1, IDtoEX_ReadData2;
+    wire [31:0] IDtoEX_Imm;
+    wire [5:0] IFtoID_Op;
+    wire [4:0] IFtoID_Rs, IFtoID_Rt, IFtoID_Rd;
 
     ID_Stage U2 (
         .clk(clk),
         .rst(rst),
         .IFtoID_PC(pc_IFID),
         .IFtoID_inst(inst_stage2),
-        
-        .IDtoEX_PC(pc_stage2),
-        .IDtoEX_ReadData1(readData1_stage2),
-        .IDtoEX_ReadData2(readData2_stage2),
-        .IDtoEX_Imm(signExtended_stage2),
-        .IFtoID_Rs(inst_stage2 [25:21]),    //25:21
-        .IFtoID_Rt(inst_stage2 [20:16]),    //20:16
-        .IFtoID_Rd(inst_stage2 [15:11]),    //15:11
-        
-        .IDtoEX_ALUSrc(ALUSrc_stage2),
-        .IDtoEX_ALUOp(ALUOp_stage2),
-        .IDtoEX_RegDst(RegDst_stage2),
-        
-        .IDtoEX_Branch(Branch_stage2),
-        .IDtoEX_MemRead(MemRead_stage2),
-        .IDtoEX_MemWrite(MemWrite_stage2),
-        
-        .IDtoEX_RegWrite(RegWrite_stage2),
-        .IDtoEX_MemtoReg(MemtoReg_stage2),
-        .IDtoEX_PCSrc(PCSrc_stage2)
-        
-/*        .writeReg(writeReg_stage2),
-        .writeData(writeData_stage2),
-        .RegWrite(RegWrite_stage2)
- */   );
+        .writeReg(IFtoID_Rd),
+        .writeData(IDtoEX_ReadData2),
+        .RegWrite(U2_RegWrite),
+        .IDtoEX_PC(pc_stage3),
+        .IDtoEX_ReadData1(IDtoEX_ReadData1),
+        .IDtoEX_ReadData2(IDtoEX_ReadData2),
+        .IDtoEX_Imm(IDtoEX_Imm),
+        .IFtoID_Op(IFtoID_Op),
+        .IFtoID_Rs(IFtoID_Rs),
+        .IFtoID_Rt(IFtoID_Rt),
+        .IFtoID_Rd(IFtoID_Rd)
+    );
+
+    wire hazard_detected;
+    wire [5:0] opcode;
+    reg [1:0] Control_ALUOp;
+    reg Control_ALUSrc, Control_RegDst, Control_Branch, Control_MemRead, Control_MemWrite, Control_RegWrite, Control_MemtoReg, Control_PCSrc;
+
+    Control U3 (
+        .hazard_detected(hazard_detected),
+        .opcode(IFtoID_Op),
+        .ALUOp(Control_ALUOp),
+        .ALUSrc(Control_ALUSrc),
+        .RegDst(Control_RegDst),
+        .Branch(Control_Branch),
+        .MemRead(Control_MemRead),
+        .MemWrite(Control_MemWrite),
+        .RegWrite(Control_RegWrite),
+        .MemtoReg(Control_MemtoReg),
+        .PCSrc(Control_PCSrc)
+    );
  
  
  
