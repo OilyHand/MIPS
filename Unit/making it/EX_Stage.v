@@ -3,7 +3,7 @@ module EX_Stage(
     input wire [31:0] IDtoEX_PCadd4, // Program Counter
     input wire [31:0] IDtoEX_ReadData1,IDtoEX_ReadData2, // Read Data from Register File
     input wire [31:0] IDtoEX_Imm, // Sign extended immediate value
-    input wire [31:0] IDtoEX_Rt, IDtoEX_Rd, // Destination Register
+    input wire [4:0] IDtoEX_Rt, IDtoEX_Rd, // Destination Register
     
     // instruction input
     input wire [5:0] funct, // Function code
