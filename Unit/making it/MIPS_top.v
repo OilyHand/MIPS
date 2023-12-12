@@ -71,12 +71,23 @@ module MIPS (
     wire PCSrc_stage4;
 
 
+    // use MEMtoWB_Register U10
+    wire [31:0] MEMtoWB_ReadData_stage5;
+    wire [31:0] ALUresult_WB;
+    wire [4:0] RegDest_WB;
+    wire MEMtoWB_MemtoReg;
+    wire MEMtoWB_RegWrite;
+    
+    
+    
+    // use WB_Stage U11
+    wire [31:0] WriteData_stage5;
 
     IF_Stage U0 (
         .clk(clk),
         .rst(rst),
         .PCWrite(hazard_PCWrite),
-        .PCSrc(/* MEM으로 부터 받을 것*/),
+        .PCSrc(PCSrc_stage4),
         .Branch(Branch_Addr_stage4),
         .IFtoID_PC(pc_stage1),
         .IFtoID_inst(inst_stage1)
@@ -101,9 +112,9 @@ module MIPS (
         .rst(rst),
         .IFtoID_PC(pc_IFID),
         .IFtoID_inst(inst_stage2),
-        .writeReg(IFtoID_Rd),
-        .writeData(IDtoEX_ReadData2),
-        .RegWrite(U2_RegWrite),
+        .writeReg(RegDest_WB),
+        .writeData(WriteData_stage5),
+        .RegWrite(MEMtoWB_RegWrite),
         
         .IDtoEX_PC(pc_stage2),
         .IDtoEX_ReadData1(readData1_stage2),
@@ -177,6 +188,8 @@ module MIPS (
     
     );
     
+    
+    
     Hazard_Detection U5 (
         .ID_EX_MemRead(IDtoEX_MemRead),
         .ID_EX_Rt(Rt_stage3),
@@ -206,7 +219,7 @@ module MIPS (
     
     // Forwarding inputs
     .EXtoMEM_ALUresult(ALUresult_stage4),
-    .WB_ALUresult(/* not yet*/),
+    .WB_ALUresult(/* WB에서 받을 것 */),
     
     // forwarding control
     .ForwardA(ForwardA_wire), .ForwardB(ForwardB_wire),
@@ -221,11 +234,7 @@ module MIPS (
 );
 
 
-
-
     
-
-
     EXtoMEM_Register U7 (
     .clk(clk), .rst(rst),
     
@@ -265,9 +274,9 @@ module MIPS (
 
 
     Forward_Unit U8 (
-    .EX_MEM_Rd(RegDest_stage4), .MEM_WB_Rd(),
+    .EX_MEM_Rd(RegDest_stage4), .MEM_WB_Rd(RegDest_WB),
     .ID_EX_Rs(Rs_stage3), .ID_EX_Rt(Rt_stage3),
-    .MEM_WB_RegWrite(), .EX_MEM_RegWrite(EXtoMEM_RegWrite),
+    .MEM_WB_RegWrite(MEMtoWB_RegWrite), .EX_MEM_RegWrite(EXtoMEM_RegWrite),
     .ForwardA(ForwardA_wire), .ForwardB(ForwardB_wire)
     );
 
@@ -300,5 +309,46 @@ module MIPS (
     // control output
     .PCSrc(PCSrc_stage4)
     );
+   
+
+    
+    MEMtoWB_Register U10 (
+    .clk(clk), .rst(rst),
+
+    // datapath input
+    .MEM_ReadData(MEM_ReadData_stage4),
+    .MEM_ALU_result(ALUresult_MEM),
+    .MEM_RegDest(RegDest_MEM),
+
+    // control input
+    .MEM_MemtoReg(EXtoMEM_MemtoReg),
+    .MEM_RegWrite(EXtoMEM_RegWrite),
+
+    // datapath output
+    .MEMtoWB_ReadData(MEMtoWB_ReadData_stage5),
+    .MEMtoWB_ALU_result(ALUresult_WB),
+    .MEMtoWB_RegDest(RegDest_WB),
+
+    // control output
+    .MEMtoWB_MemtoReg(MEMtoWB_MemtoReg),
+    .MEMtoWB_RegWrite(MEMtoWB_RegWrite)
+    );
+
+
+
+    WB_Stage U11 (
+    // datapath input
+    .MEMtoWB_ReadData(MEMtoWB_ReadData_stage5),
+    .MEMtoWB_ALU_result(ALUresult_WB),
+    .MEMtoWB_RegDest(RegDest_WB),
+
+    // control input
+    .MemtoReg(MEMtoWB_MemtoReg),
+
+    // datapath output
+    .WB_WriteReg(WriteData_stage5),
+    .WB_RegDest()
+    );
+
 
 endmodule
