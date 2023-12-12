@@ -7,7 +7,7 @@ module EX_Stage(
     
     // instruction input
     input wire [5:0] funct, // Function code
-    input wire [25:0] j_address,
+//    input wire [25:0] j_address,
     
     // control inputs
     input wire [1:0] ALUop,
@@ -26,15 +26,15 @@ module EX_Stage(
     output wire [31:0] ALUresult,
     output wire [4:0] EX_Rt,
     output wire [31:0] Branch_Addr, // computed branch address
-    output wire [31:0] Jump_address, // computed jump address
-    output wire [5:0] RegDest // Write data destination
+//    output wire [31:0] Jump_address, // computed jump address
+    output wire [4:0] RegDest // Write data destination
     
 );
     
     wire [31:0] ALUSrc_out, SL2_out;
     wire [3:0]  ALUcontrol;
     wire [31:0] FWA_out, FWB_out;
-    wire [27:0] shift_address;
+//    wire [27:0] shift_address;
     
     
     // Branch address computation (PC-relative addressing)
@@ -42,8 +42,8 @@ module EX_Stage(
     Adder add_address (.operandA(IDtoEX_PCadd4), .operandB(SL2_out), .sum(Branch_Addr));
 
     // Jump address computation (Psudo-direct addressing)
-    assign shift_address = j_address << 2;
-    assign Jump_address = { IDtoEX_PCadd4[31:28], shift_address };
+//    assign shift_address = j_address << 2;
+//    assign Jump_address = { IDtoEX_PCadd4[31:28], shift_address };
 
     // ALU Control
     ALU_Control alu_control (.ALUop(ALUop), .funct(funct), .ALUctrl(ALUcontrol));
@@ -54,8 +54,7 @@ module EX_Stage(
         .operandA(FWA_out), .operandB(ALUSrc_out),
         .aluControl(ALUcontrol),
         .result(ALUresult),
-        .zeroFlag(zero),
-        .negativeFlag(/*None*/)
+        .zeroFlag(zero)
     );
 
     // ALU Source MUX
