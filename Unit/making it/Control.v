@@ -4,7 +4,7 @@ module Control(
     output reg [1:0] ALUOp,
     output reg ALUSrc, RegDst,                  
     output reg Branch, MemRead, MemWrite,
-    output reg RegWrite, MemtoReg, PCSrc);
+    output reg RegWrite, MemtoReg);
     
     always @* begin
       ALUSrc = 1'b0;
@@ -15,7 +15,6 @@ module Control(
       MemWrite = 1'b0;
       RegWrite = 1'b0;
       MemtoReg = 1'b0;
-      PCSrc = 1'b0;
       
       if(!hazard_detected) begin
       case(opcode)
@@ -37,11 +36,13 @@ module Control(
             ALUOp = 2'b10;
             RegDst = 1'b1;
             RegWrite = 1'b1;
-        end
- /*       6'b000010: begin // jump instruction
+        end/*
+        6'b000010: begin // jump instruction
+            
         end*/
         default: ;    
       endcase
     end
+    
     end
 endmodule
