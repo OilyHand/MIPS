@@ -17,7 +17,7 @@ module MEMtoWB_Register (
 
     // control output
     output reg MEMtoWB_MemtoReg,
-    output reg MEMtoWB_RegWrite,
+    output reg MEMtoWB_RegWrite
 
 );
 
