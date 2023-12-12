@@ -12,7 +12,7 @@ module IDtoEX_Register(
  
     //input from Control
     input wire [1:0] ALUOp,
-    input wire ALUSrc, RegDst, Branch, MemRead, MemWrite, RegWrite, MemtoReg, PCSrc,
+    input wire ALUSrc, RegDst, Branch, MemRead, MemWrite, RegWrite, MemtoReg,
  
  
     // outputs to EX_Stage
@@ -37,7 +37,7 @@ module IDtoEX_Register(
     
     // outputs to next pipe
     output reg IDtoEX_Branch, IDtoEX_MemRead, IDtoEX_MemWrite,     // stage 4에서 사용
-    output reg IDtoEX_RegWrite, IDtoEX_MemtoReg, IDtoEX_PCSrc      // stage 5에서 사용
+    output reg IDtoEX_RegWrite, IDtoEX_MemtoReg      // stage 5에서 사용
     
     );
     
@@ -60,7 +60,6 @@ module IDtoEX_Register(
         IDtoEX_MemWrite <= 0;
         IDtoEX_RegWrite <= 0;
         IDtoEX_MemtoReg <= 0;
-        IDtoEX_PCSrc <= 0;
         
     end
     else begin
@@ -83,7 +82,6 @@ module IDtoEX_Register(
         IDtoEX_MemWrite <= MemWrite;
         IDtoEX_RegWrite <= RegWrite;
         IDtoEX_MemtoReg <= MemtoReg;
-        IDtoEX_PCSrc <= PCSrc;
         
     end
   end
