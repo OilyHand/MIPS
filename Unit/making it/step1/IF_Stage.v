@@ -1,10 +1,33 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 2023/11/27 23:04:58
+// Design Name: 
+// Module Name: MIPS_Stage1
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+// synthesis, Implementation 통과
+
 module IF_Stage(
         input wire clk,
         input wire rst,
         
         input wire PCWrite,
         input wire PCSrc,
-        input wire Branch,
+        input wire [31:0] Branch,
         
         output wire [31:0] IFtoID_PC,
         output wire [31:0] IFtoID_inst
