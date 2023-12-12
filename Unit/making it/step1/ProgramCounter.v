@@ -11,5 +11,3 @@ module ProgramCounter(
         if (PCWrite)  // PCwrite Control unit이 활성화되면
             pc <= PCWriteValue;  // 그 값으로 pc 덮어쓰기
     end
-
-endmodule
