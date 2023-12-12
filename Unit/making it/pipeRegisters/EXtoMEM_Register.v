@@ -7,7 +7,7 @@ module EXtoMEM_Register(
     input wire [4:0] EX_Rt,
     input wire [31:0] EX_Branch_Addr,
     input wire [4:0] EX_RegDest,
-    input wire [31:0] EX_Jump_address,
+ //   input wire [31:0] EX_Jump_address,
 
     // control input
     // MEM
@@ -23,8 +23,8 @@ module EXtoMEM_Register(
     output reg [31:0] EXtoMEM_ALUresult,
     output reg [4:0] EXtoMEM_Rt,
     output reg [31:0] EXtoMEM_Branch_Addr,
-    output reg [31:0] EXtoMEM_Jump_address,
-    output reg [4:0] EXtoMEM_RegDest
+//    output reg [31:0] EXtoMEM_Jump_address,
+    output reg [4:0] EXtoMEM_RegDest,
     
     // control output
     output reg MEM_Branch,
@@ -32,7 +32,7 @@ module EXtoMEM_Register(
     output reg MEM_MemWrite,
     // WB
     output reg MEM_MemtoReg,
-    output reg MEM_RegWrite,
+    output reg MEM_RegWrite
 );
 
     always @(posedge clk) begin
@@ -42,7 +42,7 @@ module EXtoMEM_Register(
         EXtoMEM_Rt <= EX_Rt;
         EXtoMEM_Branch_Addr <= EX_Branch_Addr;
         EXtoMEM_RegDest <= EX_RegDest;
-        EXtoMEM_Jump_address <= EX_Jump_address;
+//        EXtoMEM_Jump_address <= EX_Jump_address;
 
         // control
         MEM_Branch <= EX_Branch;
