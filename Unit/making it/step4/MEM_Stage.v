@@ -7,14 +7,14 @@ module MEM_Stage(
     input wire [31:0] EXtoMEM_ALUresult,
     input wire [4:0] EXtoMEM_Rt,
     input wire [31:0] EXtoMEM_Branch_Addr,
-    input wire [31:0] EXtoMEM_Jump_address,
+//    input wire [31:0] EXtoMEM_Jump_address,
     input wire [4:0] EXtoMEM_RegDest,
     
     // control input
     input wire Branch,
     input wire MemWrite,
     input wire MemRead,
-    input wire Jump,
+ //   input wire Jump,
 
     // datapath output
     output wire [31:0] MEM_ReadData,
@@ -39,13 +39,13 @@ module MEM_Stage(
 
     // select signal of PC source
     assign PCSrc = Branch & EXtoMEM_zero;
-
+    assign MEM_PCSrc_Addr = EXtoMEM_Branch_Addr;
     // select next address
-    Mux_2 mux_PCSrc
-    (
-        .X0(EXtoMEM_Branch_Addr), .X1(EXtoMEM_Jump_address),
-        .sel(Jump),
-        .Y(MEM_PCSrc_Addr)
-    );
+//    Mux_2 mux_PCSrc
+//    (
+//        .X0(EXtoMEM_Branch_Addr), .X1(EXtoMEM_Jump_address),
+//        .sel(Jump),
+//        .Y(MEM_PCSrc_Addr)
+//    );
 
 endmodule
