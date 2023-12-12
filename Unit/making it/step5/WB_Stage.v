@@ -8,7 +8,7 @@ module WB_Stage(
     input wire MemtoReg,
 
     // datapath output
-    output wire WB_WriteReg,
+    output wire [31:0] WB_WriteReg,
     output wire WB_RegDest
     );
     
