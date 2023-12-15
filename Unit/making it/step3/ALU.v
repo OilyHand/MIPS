@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module ALU(
     input wire [31:0] operandA,
     input wire [31:0] operandB,
