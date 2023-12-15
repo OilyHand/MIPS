@@ -1,12 +1,26 @@
 module MIPS (
     input wire clk,
-    input wire rst);
+    input wire rst,
+    
+    output wire [31:0] ProgramCounter_Output,
+    output wire [31:0] Register_t0, //register number 8
+    output wire [31:0] Register_t1, //register number 8
+    output wire [31:0] Register_t2, //register number 8
+    output wire [31:0] Register_t3, //register number 8
+    
+    output wire [31:0] debug1, debug2, debug3, debug4
+    );
 
+
+    //output port
+    wire [31:0] pc_current;
+    wire [31:0] t0, t1, t2, t3;
 
     //use IF_StageU0
     wire [31:0] pc_stage1;
     wire [31:0] inst_stage1;
     wire hazard_PCWrite;
+
     
     
     //use IFtoID_Register U1
@@ -15,7 +29,7 @@ module MIPS (
     wire hazard_IF_ID_Write;
     
     
-    //use ID_Stage U2
+    //use ID_Stage U2x
     wire [31:0] pc_stage2;
     wire [31:0] readData1_stage2;
     wire [31:0] readData2_stage2;
@@ -47,7 +61,7 @@ module MIPS (
     //use EX_Stage U6
     wire zero_stage3;
     wire [31:0] ALUresult_stage3;
-    wire [4:0] EX_Rt_stage3;
+    wire [31:0] EX_ReadData2_stage3;
     wire [31:0] Branch_Addr_stage3;
     wire [4:0] RegDest_stage3;
     
@@ -56,7 +70,7 @@ module MIPS (
 
     //use EXtoMEM_Register U7
     wire zero_stage4;
-    wire [4:0] EXtoMEM_Rt_stage4;
+    wire [31:0] EXtoMEM_ReadData2_stage4;
     wire [31:0] ALUresult_stage4;
     wire [31:0] Branch_Addr_stage4;
     wire [4:0] RegDest_stage4;
@@ -82,7 +96,12 @@ module MIPS (
     
     // use WB_Stage U11
     wire [31:0] WriteData_stage5;
+    wire [4:0] RegDest_stage5;
 
+
+
+    
+    
     IF_Stage U0 (
         .clk(clk),
         .rst(rst),
@@ -90,7 +109,8 @@ module MIPS (
         .PCSrc(PCSrc_stage4),
         .Branch(Branch_Addr_stage4),
         .IFtoID_PC(pc_stage1),
-        .IFtoID_inst(inst_stage1)
+        .IFtoID_inst(inst_stage1),
+        .PC_current(pc_current)
     );
 
 
@@ -112,7 +132,7 @@ module MIPS (
         .rst(rst),
         .IFtoID_PC(pc_IFID),
         .IFtoID_inst(inst_stage2),
-        .writeReg(RegDest_WB),
+        .writeReg(RegDest_stage5),
         .writeData(WriteData_stage5),
         .RegWrite(MEMtoWB_RegWrite),
         
@@ -124,10 +144,15 @@ module MIPS (
         .IFtoID_Rs(Rs_stage2),
         .IFtoID_Rt(Rt_stage2),
         .IFtoID_Rd(Rd_stage2),
-        .funct(funct_stage2)
+        .funct(funct_stage2),
+        .output_t0(t0),
+        .output_t1(t1),
+        .output_t2(t2),
+        .output_t3(t3)
     );
 
-
+    assign debug1 = readData1_stage2;
+    assign debug2 = readData2_stage2;
 
     Control U3 (
         .hazard_detected(hazard_stall),
@@ -192,7 +217,7 @@ module MIPS (
     
     Hazard_Detection U5 (
         .ID_EX_MemRead(IDtoEX_MemRead),
-        .ID_EX_Rt(Rt_stage3),
+        .ID_EX_Rt(Rt_stage3),   
         .IF_ID_Rs(Rs_stage2),
         .IF_ID_Rt(Rt_stage2), 
         .PCWrite(hazard_PCWrite),
@@ -219,7 +244,7 @@ module MIPS (
     
     // Forwarding inputs
     .EXtoMEM_ALUresult(ALUresult_stage4),
-    .WB_ALUresult(/* WB에서 받을 것 */),
+    .WB_ALUresult(WriteData_stage5),
     
     // forwarding control
     .ForwardA(ForwardA_wire), .ForwardB(ForwardB_wire),
@@ -227,13 +252,13 @@ module MIPS (
     // datapath output
     .zero(zero_stage3),
     .ALUresult(ALUresult_stage3),
-    .EX_Rt(EX_Rt_stage3),
+    .EX_ReadData2(EX_ReadData2_stage3),
     .Branch_Addr(Branch_Addr_stage3), // computed branch address
 //    output wire [31:0] Jump_address, // computed jump address
-    .RegDest(RegDest_stage3) // Write data destination    
+    .RegDest(RegDest_stage3) // Write data destination
 );
-
-
+    
+        assign debug3 = ALUresult_stage3;
     
     EXtoMEM_Register U7 (
     .clk(clk), .rst(rst),
@@ -241,7 +266,7 @@ module MIPS (
     // datapath input
     .EX_zero(zero_stage3),
     .EX_ALUresult(ALUresult_stage3),
-    .EX_Rt(EX_Rt_stage3),
+    .EX_ReadData2(EX_ReadData2_stage3),
     .EX_Branch_Addr(Branch_Addr_stage3),
     .EX_RegDest(RegDest_stage3),
 //    input wire [31:0] EX_Jump_address,
@@ -258,7 +283,7 @@ module MIPS (
     // datapath output
     .EXtoMEM_zero(zero_stage4),
     .EXtoMEM_ALUresult(ALUresult_stage4),
-    .EXtoMEM_Rt(EXtoMEM_Rt_stage4),
+    .EXtoMEM_ReadData2(EXtoMEM_ReadData2_stage4),
     .EXtoMEM_Branch_Addr(Branch_Addr_stage4),
 //    .EXtoMEM_Jump_address(),
     .EXtoMEM_RegDest(RegDest_stage4),
@@ -273,8 +298,9 @@ module MIPS (
 );
 
 
+
     Forward_Unit U8 (
-    .EX_MEM_Rd(RegDest_stage4), .MEM_WB_Rd(RegDest_WB),
+    .EX_MEM_Rd(RegDest_MEM), .MEM_WB_Rd(RegDest_stage5),
     .ID_EX_Rs(Rs_stage3), .ID_EX_Rt(Rt_stage3),
     .MEM_WB_RegWrite(MEMtoWB_RegWrite), .EX_MEM_RegWrite(EXtoMEM_RegWrite),
     .ForwardA(ForwardA_wire), .ForwardB(ForwardB_wire)
@@ -289,7 +315,7 @@ module MIPS (
     // datapath input
     .EXtoMEM_zero(zero_stage4),
     .EXtoMEM_ALUresult(ALUresult_stage4),
-    .EXtoMEM_Rt(EXtoMEM_Rt_stage4),
+    .EXtoMEM_ReadData2(EXtoMEM_ReadData2_stage4),
     .EXtoMEM_Branch_Addr(Branch_Addr_stage4),
 //    .EXtoMEM_Jump_address(),
     .EXtoMEM_RegDest(RegDest_stage4),
@@ -335,7 +361,6 @@ module MIPS (
     );
 
 
-
     WB_Stage U11 (
     // datapath input
     .MEMtoWB_ReadData(MEMtoWB_ReadData_stage5),
@@ -347,8 +372,15 @@ module MIPS (
 
     // datapath output
     .WB_WriteReg(WriteData_stage5),
-    .WB_RegDest()
+    .WB_RegDest(RegDest_stage5)
     );
 
+
+    assign ProgramCounter_Output = pc_current;
+    assign Register_t0 = t0;
+    assign Register_t1 = t1;    
+    assign Register_t2 = t2;
+    assign Register_t3 = t3;
+    assign debug4 = WriteData_stage5;   
 
 endmodule
