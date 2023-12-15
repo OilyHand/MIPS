@@ -9,7 +9,7 @@ module WB_Stage(
 
     // datapath output
     output wire [31:0] WB_WriteReg,
-    output wire WB_RegDest
+    output wire [4:0] WB_RegDest
     );
     
     Mux_2 mux_WB
