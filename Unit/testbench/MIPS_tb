@@ -1,0 +1,22 @@
+`timescale 1ns / 1ps
+
+module MIPS_tb();
+reg clk, rst;
+wire [31:0] ProgramCounter_Output, t0, t1, t2, t3, debug1, debug2, debug3, debug4;
+
+MIPS uut (.clk(clk), .rst(rst), .ProgramCounter_Output(ProgramCounter_Output),
+    .Register_t0(t0), .Register_t1(t1), .Register_t2(t2), .Register_t3(t3),
+    .debug1(debug1), .debug2(debug2), .debug3(debug3), .debug4(debug4));
+
+initial begin
+    clk = 0;
+    rst = 1;
+    #10
+    rst = 0;
+    #500
+    $finish;
+end
+
+always #10 clk <= ~clk;
+
+endmodule
