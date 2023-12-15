@@ -41,7 +41,7 @@ module IDtoEX_Register(
     
     );
     
-    always @ (posedge clk) begin
+    always @ (posedge clk or posedge rst) begin
     if (rst) begin 
         IDtoEX_PC <= 0;
         IDtoEX_ReadData1 <= 0;
