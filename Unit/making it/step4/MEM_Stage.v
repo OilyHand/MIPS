@@ -5,7 +5,7 @@ module MEM_Stage(
     // datapath input
     input wire EXtoMEM_zero,
     input wire [31:0] EXtoMEM_ALUresult,
-    input wire [4:0] EXtoMEM_Rt,
+    input wire [31:0] EXtoMEM_ReadData2,
     input wire [31:0] EXtoMEM_Branch_Addr,
 //    input wire [31:0] EXtoMEM_Jump_address,
     input wire [4:0] EXtoMEM_RegDest,
@@ -33,13 +33,15 @@ module MEM_Stage(
         .memWrite(MemWrite),
         .memRead(MemRead),
         .address(EXtoMEM_ALUresult),
-        .writeData(MEM_ALU_result),
+        .writeData(EXtoMEM_ReadData2),
         .readData(MEM_ReadData)
     );
 
     // select signal of PC source
     assign PCSrc = Branch & EXtoMEM_zero;
     assign MEM_PCSrc_Addr = EXtoMEM_Branch_Addr;
+    assign MEM_RegDest = EXtoMEM_RegDest;
+    assign MEM_ALU_result = EXtoMEM_ALUresult;
     // select next address
 //    Mux_2 mux_PCSrc
 //    (
