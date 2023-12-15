@@ -7,12 +7,13 @@ module IF_Stage(
         input wire [31:0] Branch,
         
         output wire [31:0] IFtoID_PC,
-        output wire [31:0] IFtoID_inst
+        output wire [31:0] IFtoID_inst,
+        
+        output wire [31:0] PC_current
     );
         wire [31:0] add_result;
         wire [31:0] Branch_value;
         
-        wire ID_PCWrite;
         wire ID_PCSrc;
         
         wire [31:0] MuxtoPC;
@@ -30,9 +31,9 @@ module IF_Stage(
     
     
         ProgramCounter u1 (
-            .clk(clk),
+            .clk(clk), .rst(rst),
             .PCWriteValue(MuxtoPC),
-            .PCWrite(ID_PCWrite),
+            .PCWrite(PCWrite),
             .pc(PCtoInst) // 중간 변수에 연결
         );
     
@@ -51,5 +52,6 @@ module IF_Stage(
         );
         
         assign IFtoID_PC = add_result;
+        assign PC_current = PCtoInst;
     
     endmodule
