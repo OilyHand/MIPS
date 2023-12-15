@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module ALU_Control(
     input wire [1:0] ALUop,
     input wire [5:0] funct,
@@ -29,8 +31,10 @@ slt	1 0	    1 0 1 0 1 0	    0 1 1 1
                     ALUctrl = 4'b0001;
                 else if (funct == 6'b101010) // slt
                     ALUctrl = 4'b0111;
-                else // nor
+                else if (funct == 6'b100111) // nor
                     ALUctrl = 4'b0000;
+                else
+                    ALUctrl = 4'b0010;
         default: ALUctrl = 4'd0;
       endcase
     end
