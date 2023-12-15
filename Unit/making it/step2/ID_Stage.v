@@ -17,11 +17,14 @@ module ID_Stage(
     output wire [4:0] IFtoID_Rd,    //15:11
   //output wire [25:0] jump_instruction //25:0
     
-    output wire [5:0] funct
+    
+    output wire [5:0] funct,
+    
+    output wire [31:0] output_t0, output_t1, output_t2, output_t3
 );
 
     // Register File
-    wire [31:0] RD1, RD2;
+    wire [31:0] RD1, RD2, t0, t1, t2, t3;
     wire [4:0] RR1, RR2, WR;
     wire [31:0] WD;
     wire WriteReg;
@@ -39,12 +42,17 @@ module ID_Stage(
     RegisterFile u0 (
         .RD1(RD1),
         .RD2(RD2),
+        .t0(t0),
+        .t1(t1),
+        .t2(t2),
+        .t3(t3),
         .RR1(RR1),
         .RR2(RR2),
         .WR(WR),
         .WD(WD),
         .WriteReg(WriteReg),
-        .clk(clk)
+        .clk(clk),
+        .rst(rst)
     );
 
 
@@ -66,5 +74,10 @@ module ID_Stage(
     assign IFtoID_Rt = IFtoID_inst[20:16];
     assign IFtoID_Rd = IFtoID_inst[15:11];
     assign funct = IFtoID_inst[5:0];
+    
+    assign output_t0 = t0;
+    assign output_t1 = t1;   
+    assign output_t2 = t2;
+    assign output_t3 = t3;
     
 endmodule
