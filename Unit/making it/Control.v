@@ -28,6 +28,13 @@ module Control(
             ALUSrc = 1'b1;
             MemWrite = 1'b1;
           end
+        6'b001000: begin // Addi instruction      
+            ALUSrc = 1'b1;
+            ALUOp = 2'b10;
+//            RegDst = 1'b1;
+            RegWrite = 1'b1;
+            MemtoReg = 1'b1;
+        end
         6'b000100: begin // BEQ instruction      
             ALUOp = 1'b1;
             Branch = 1'b1;
@@ -36,11 +43,12 @@ module Control(
             ALUOp = 2'b10;
             RegDst = 1'b1;
             RegWrite = 1'b1;
+            MemtoReg = 1'b1;
         end/*
         6'b000010: begin // jump instruction
             
         end*/
-        default: ;    
+        default:;    
       endcase
     end
     
