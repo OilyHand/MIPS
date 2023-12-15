@@ -24,11 +24,10 @@ module EX_Stage(
     // datapath output
     output wire zero,
     output wire [31:0] ALUresult,
-    output wire [4:0] EX_Rt,
+    output wire [31:0] EX_ReadData2,
     output wire [31:0] Branch_Addr, // computed branch address
 //    output wire [31:0] Jump_address, // computed jump address
     output wire [4:0] RegDest // Write data destination
-    
 );
     
     wire [31:0] ALUSrc_out, SL2_out;
@@ -47,6 +46,7 @@ module EX_Stage(
 
     // ALU Control
     ALU_Control alu_control (.ALUop(ALUop), .funct(funct), .ALUctrl(ALUcontrol));
+
     
     // ALU
     ALU alu 
@@ -59,6 +59,7 @@ module EX_Stage(
 
     // ALU Source MUX
     Mux_2 mux_ALUSrc (.X0(FWB_out), .X1(IDtoEX_Imm), .sel(ALUSrc), .Y(ALUSrc_out));
+    
     
     // Forward A
     Mux_4 mux_FWA
@@ -80,5 +81,5 @@ module EX_Stage(
     Mux5_2 mux_RegDst (.X0(IDtoEX_Rt), .X1(IDtoEX_Rd), .sel(RegDst), .Y(RegDest));
     
     assign EX_Rt = FWB_out;
-
+    assign EX_ReadData2 = ALUSrc_out;
 endmodule
