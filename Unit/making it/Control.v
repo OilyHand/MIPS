@@ -7,6 +7,9 @@ module Control(
     output reg RegWrite, MemtoReg);
     
     always @* begin
+      
+      if(!hazard_detected) begin
+      
       ALUSrc = 1'b0;
       RegDst = 1'b0;
       ALUOp = 2'b00;
@@ -16,7 +19,6 @@ module Control(
       RegWrite = 1'b0;
       MemtoReg = 1'b0;
       
-      if(!hazard_detected) begin
       case(opcode)
         6'b100011: begin // LW instruction
             ALUSrc = 1'b1;
@@ -52,5 +54,15 @@ module Control(
       endcase
     end
     
+    else begin
+      ALUSrc = 1'b0;
+      RegDst = 1'b0;
+      ALUOp = 2'b00;
+      Branch = 1'b0;
+      MemRead = 1'b0;
+      MemWrite = 1'b0;
+      RegWrite = 1'b0;
+      MemtoReg = 1'b0;
+    end
     end
 endmodule
