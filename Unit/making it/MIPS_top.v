@@ -8,7 +8,11 @@ module MIPS (
     output wire [31:0] Register_t2, //register number 8
     output wire [31:0] Register_t3, //register number 8
     
-    output wire [31:0] debug1, debug2, debug3, debug4
+    output wire [31:0] debug_RD1_stage2, debug_RD2_stage2,
+                       debug_ALUresult_stage3, debug_WBdata_stage5,
+    output wire [4:0] debug_RegDest_MEM, debug_RegDest_stage5,
+    output wire [1:0] debug_forwarding_A, debug_forwarding_B
+
     );
 
 
@@ -151,8 +155,7 @@ module MIPS (
         .output_t3(t3)
     );
 
-    assign debug1 = readData1_stage2;
-    assign debug2 = readData2_stage2;
+
 
     Control U3 (
         .hazard_detected(hazard_stall),
@@ -258,7 +261,7 @@ module MIPS (
     .RegDest(RegDest_stage3) // Write data destination
 );
     
-        assign debug3 = ALUresult_stage3;
+        
     
     EXtoMEM_Register U7 (
     .clk(clk), .rst(rst),
@@ -381,6 +384,14 @@ module MIPS (
     assign Register_t1 = t1;    
     assign Register_t2 = t2;
     assign Register_t3 = t3;
-    assign debug4 = WriteData_stage5;   
+    
+    assign debug_RD1_stage2 = readData1_stage2;
+    assign debug_RD2_stage2 = readData2_stage2;
+    assign debug_ALUresult_stage3 = ALUresult_stage3;
+    assign debug_WBdata_stage5 = WriteData_stage5;
+    assign debug_RegDest_MEM = RegDest_MEM;
+    assign debug_RegDest_stage5 = RegDest_stage5;
+    assign debug_forwarding_A = ForwardA_wire;
+    assign debug_forwarding_B = ForwardB_wire;
 
 endmodule
