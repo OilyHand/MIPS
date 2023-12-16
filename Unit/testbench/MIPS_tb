@@ -2,21 +2,22 @@
 
 module MIPS_tb();
 reg clk, rst;
-wire [31:0] ProgramCounter_Output, t0, t1, t2, t3, debug1, debug2, debug3, debug4;
+wire [31:0] ProgramCounter_Output, t0, t1, t2, t3, RD1_stage2, RD2_stage2, ALUresult_stage3, WBdata_stage5;
+wire [4:0] RegDest_MEM, RegDest_stage5;
+wire [1:0] forwarding_A, forwarding_B;
 
 MIPS uut (.clk(clk), .rst(rst), .ProgramCounter_Output(ProgramCounter_Output),
     .Register_t0(t0), .Register_t1(t1), .Register_t2(t2), .Register_t3(t3),
-    .debug1(debug1), .debug2(debug2), .debug3(debug3), .debug4(debug4));
+    .debug_RD1_stage2(RD1_stage2), .debug_RD2_stage2(RD2_stage2),
+    .debug_ALUresult_stage3(ALUresult_stage3), .debug_WBdata_stage5(WBdata_stage5),
+    .debug_RegDest_MEM(RegDest_MEM), .debug_RegDest_stage5(RegDest_stage5),
+    .debug_forwarding_A(forwarding_A), .debug_forwarding_B(forwarding_B));
 
 initial begin
     clk = 0;
     rst = 1;
-    #10
+    #5
     rst = 0;
-    #500
+    #200
     $finish;
 end
-
-always #10 clk <= ~clk;
-
-endmodule
