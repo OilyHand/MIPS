@@ -1,5 +1,24 @@
-module RegisterFile(RD1, RD2, t0, t1, t2, t3, RR1, RR2, WR, WD, WriteReg, clk, rst);
-    output [31:0] RD1, RD2, t0, t1, t2, t3;
+`timescale 1ns / 1ps
+
+///////////////////////////////////////////////////////////////////////////////
+// Module Name: RegisterFile
+// Description: 
+//
+// Ports: 
+//   - RD1, RD2: Read Data 1, Read Data 2
+//   - RR!, RR2: Read Register 1, Read Register 2
+//   - WR: Write Register
+//   - WD: Write Data
+//   - WriteReg: WriteReg control signal
+//   - clk: clock
+///////////////////////////////////////////////////////////////////////////////
+
+module RegisterFile(RD1, RD2, zero, at, v0, v1, a0, a1, a2, a3, t0, t1, t2, t3, t4, t5, t6, t7,
+                    s0, s1, s2, s3, s4, s5, s6, s7, t8, t9, k0, k1, gp, sp, fp, ra,
+                    RR1, RR2, WR, WD, WriteReg, clk, rst);
+                    
+    output [31:0] RD1, RD2, zero, at, v0, v1, a0, a1, a2, a3, t0, t1, t2, t3, t4, t5, t6, t7,
+                  s0, s1, s2, s3, s4, s5, s6, s7, t8, t9, k0, k1, gp, sp, fp, ra;
     input [4:0] RR1, RR2, WR; 
     input [31:0] WD;
     input clk, rst, WriteReg; // control signal
@@ -63,9 +82,37 @@ module RegisterFile(RD1, RD2, t0, t1, t2, t3, RR1, RR2, WR, WD, WriteReg, clk, r
     dff Reg30 (.Q(Q[30]), .D(WD),  .En(WSel[30]), .clk(clk), .rst(rst));
     dff Reg31 (.Q(Q[31]), .D(WD),  .En(WSel[31]), .clk(clk), .rst(rst));
     
+    assign zero = Q[0];
+    assign at = Q[1];
+    assign v0 = Q[2];
+    assign v1 = Q[3];
+    assign a0 = Q[4];
+    assign a1 = Q[5];
+    assign a2 = Q[6];
+    assign a3 = Q[7];
     assign t0 = Q[8];
     assign t1 = Q[9];
     assign t2 = Q[10];
     assign t3 = Q[11];
-    
+    assign t4 = Q[12];
+    assign t5 = Q[13];
+    assign t6 = Q[14];
+    assign t7 = Q[15];
+    assign s0 = Q[16];
+    assign s1 = Q[17];
+    assign s2 = Q[18];
+    assign s3 = Q[19];
+    assign s4 = Q[20];
+    assign s5 = Q[21];
+    assign s6 = Q[22];
+    assign s7 = Q[23];
+    assign t8 = Q[24];
+    assign t9 = Q[25];
+    assign k0 = Q[26];
+    assign k1 = Q[27];
+    assign gp = Q[28];
+    assign sp = Q[29];
+    assign fp = Q[30];
+    assign ra = Q[31];    
+       
 endmodule
