@@ -1,7 +1,7 @@
 module IFtoID_Register (
     input wire clk, rst,
     input wire [31:0] IF_PC, IF_inst,
-    input wire IF_ID_Write,
+    input wire IF_ID_Write, IF_Flush,
     
     output reg [31:0] ID_PC, ID_inst);
  
@@ -10,8 +10,8 @@ module IFtoID_Register (
     reg [31:0] prev_IF_inst;    //이전 값 저장
  
  
-  always @ (posedge clk or posedge rst) begin
-    if (rst) begin
+  always @ (posedge clk or posedge rst or posedge IF_Flush) begin
+    if (rst || IF_Flush) begin
         ID_PC <= 0;
         ID_inst <= 0;
         prev_IF_PC <= 0;      //이전 값 저장
