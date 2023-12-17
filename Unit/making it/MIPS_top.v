@@ -3,10 +3,14 @@ module MIPS (
     input wire rst,
     
     output wire [31:0] ProgramCounter_Output,
-    output wire [31:0] Register_t0, //register number 8
-    output wire [31:0] Register_t1, //register number 8
-    output wire [31:0] Register_t2, //register number 8
-    output wire [31:0] Register_t3, //register number 8
+    output wire [31:0] Register_0, Register_1, Register_2, Register_3,
+                        Register_4, Register_5, Register_6, Register_7,
+                        Register_8, Register_9, Register_10, Register_11,
+                        Register_12, Register_13, Register_14, Register_15,
+                        Register_16, Register_17, Register_18, Register_19,
+                        Register_20, Register_21, Register_22, Register_23,
+                        Register_24, Register_25, Register_26, Register_27,
+                        Register_28, Register_29, Register_30, Register_31,
     
     output wire [31:0] debug_RD1_stage2, debug_RD2_stage2,
                        debug_ALUresult_stage3, debug_WBdata_stage5,
@@ -18,7 +22,8 @@ module MIPS (
 
     //output port
     wire [31:0] pc_current;
-    wire [31:0] t0, t1, t2, t3;
+    wire [31:0] zero, at, v0, v1, a0, a1, a2, a3, t0, t1, t2, t3, t4, t5, t6, t7,
+                s0, s1, s2, s3, s4, s5, s6, s7, t8, t9, k0, k1, gp, sp, fp, ra;
 
     //use IF_StageU0
     wire [31:0] pc_stage1;
@@ -149,10 +154,12 @@ module MIPS (
         .IFtoID_Rt(Rt_stage2),
         .IFtoID_Rd(Rd_stage2),
         .funct(funct_stage2),
-        .output_t0(t0),
-        .output_t1(t1),
-        .output_t2(t2),
-        .output_t3(t3)
+        .output_0(zero), .output_1(at), .output_2(v0), .output_3(v1), .output_4(a0), .output_5(a1),
+        .output_6(a2), .output_7(a3), .output_8(t0), .output_9(t1), .output_10(t2), .output_11(t3),
+        .output_12(t4), .output_13(t5), .output_14(t6), .output_15(t7), .output_16(s0), .output_17(s1),
+        .output_18(s2), .output_19(s3), .output_20(s4), .output_21(s5), .output_22(s6), .output_23(s7),
+        .output_24(t8), .output_25(t9), .output_26(k0), .output_27(k1), .output_28(gp), .output_29(sp),
+        .output_30(fp), .output_31(ra)
     );
 
 
@@ -380,10 +387,38 @@ module MIPS (
 
 
     assign ProgramCounter_Output = pc_current;
-    assign Register_t0 = t0;
-    assign Register_t1 = t1;    
-    assign Register_t2 = t2;
-    assign Register_t3 = t3;
+    assign Register_0 = zero;
+    assign Register_1 = at;    
+    assign Register_2 = v0;
+    assign Register_3 = v1;
+    assign Register_4 = a0;
+    assign Register_5 = a1;    
+    assign Register_6 = a2;
+    assign Register_7 = a3;
+    assign Register_8 = t0;
+    assign Register_9 = t1;    
+    assign Register_10 = t2;
+    assign Register_11 = t3;
+    assign Register_12 = t4;
+    assign Register_13 = t5;    
+    assign Register_14 = t6;
+    assign Register_15 = t7;
+    assign Register_16 = s0;
+    assign Register_17 = s1;    
+    assign Register_18 = s2;
+    assign Register_19 = s3;
+    assign Register_20 = s4;
+    assign Register_21 = s5;    
+    assign Register_22 = s6;
+    assign Register_23 = s7;
+    assign Register_24 = t8;
+    assign Register_25 = t9;    
+    assign Register_26 = k0;
+    assign Register_27 = k1;
+    assign Register_28 = gp;
+    assign Register_29 = sp;    
+    assign Register_30 = fp;
+    assign Register_31 = ra;
     
     assign debug_RD1_stage2 = readData1_stage2;
     assign debug_RD2_stage2 = readData2_stage2;
