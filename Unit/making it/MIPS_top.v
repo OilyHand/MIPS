@@ -58,7 +58,8 @@ module MIPS (
     wire hazard_stall;
     wire [5:0] opcode;
     wire [1:0] Control_ALUOp;
-    wire Control_ALUSrc, Control_RegDst, Control_Branch, Control_MemRead, Control_MemWrite, Control_RegWrite, Control_MemtoReg;
+    wire Control_ALUSrc, Control_RegDst, Control_Branch, Control_MemRead,
+          Control_MemWrite, Control_RegWrite, Control_MemtoReg, Control_IF_Flush;
 
 
     //use U4 IDEX_Register
@@ -136,6 +137,7 @@ module MIPS (
         .IF_PC(pc_stage1),
         .IF_inst(inst_stage1),
         .IF_ID_Write(hazard_IF_ID_Write),
+        .IF_Flush(Control_IF_Flush),
 //output
         .ID_PC(pc_IFID),
         .ID_inst(inst_stage2)
@@ -176,6 +178,7 @@ module MIPS (
 //input
         .hazard_detected(hazard_stall),
         .opcode(Op_stage2),
+        .branch_equal(branch_equal_stage2),
 //output
         .ALUOp(Control_ALUOp),
         .ALUSrc(Control_ALUSrc),
@@ -184,7 +187,8 @@ module MIPS (
         .MemRead(Control_MemRead),
         .MemWrite(Control_MemWrite),
         .RegWrite(Control_RegWrite),
-        .MemtoReg(Control_MemtoReg)
+        .MemtoReg(Control_MemtoReg),
+        .IF_Flush(Control_IF_Flush)
     );
 
     
