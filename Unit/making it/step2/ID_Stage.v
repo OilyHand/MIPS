@@ -19,6 +19,7 @@ module ID_Stage(
     
     
     output wire [5:0] funct,
+    output wire branch_equal,
     
     output wire [31:0] output_0, output_1, output_2, output_3, output_4, output_5, output_6, output_7, output_8,
                        output_9, output_10, output_11, output_12, output_13, output_14, output_15, output_16, output_17, output_18,
@@ -110,5 +111,7 @@ module ID_Stage(
     assign output_29 = sp;   
     assign output_30 = fp;
     assign output_31 = ra;
+    
+    assign branch_equal = (RD1 == RD2);
     
 endmodule
