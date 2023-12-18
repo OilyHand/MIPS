@@ -5,7 +5,7 @@ module ALU(
     input wire [31:0] operandB,
     input wire [3:0]  aluControl, // ALU 동작을 제어하는 신호
     output reg [31:0] result,
-    output wire zeroFlag          // 결과가 0인지 여부를 나타내는 플래그
+//    output wire zeroFlag          // 결과가 0인지 여부를 나타내는 플래그
 );
     always @(operandA or operandB or aluControl) begin
         casex (aluControl)
@@ -25,5 +25,5 @@ module ALU(
         endcase
     end
     
-    assign zeroFlag = (result == 32'h0);
+//    assign zeroFlag = (result == 32'h0);
 endmodule
