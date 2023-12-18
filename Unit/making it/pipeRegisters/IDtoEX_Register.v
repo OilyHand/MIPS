@@ -3,20 +3,18 @@ module IDtoEX_Register(
     input wire rst,
     
     //input from ID_Stage
-    input wire [31:0] IFtoID_PC,
-    input wire [31:0] IFtoID_ReadData1, IFtoID_ReadData2,
-    input wire [31:0] IFtoID_Imm,
-    input wire [4:0] IFtoID_Rs, IFtoID_Rt, IFtoID_Rd,
+    input wire [31:0] ID_ReadData1, ID_ReadData2,
+    input wire [31:0] ID_Imm,
+    input wire [4:0] ID_Rs, ID_Rt, ID_Rd,
     input wire [5:0] funct,
  
  
     //input from Control
     input wire [1:0] ALUOp,
-    input wire ALUSrc, RegDst, Branch, MemRead, MemWrite, RegWrite, MemtoReg,
+    input wire ALUSrc, RegDst, MemRead, MemWrite, RegWrite, MemtoReg,
  
  
     // outputs to EX_Stage
-    output reg [31:0] IDtoEX_PC, // Program Counter
     output reg [31:0] IDtoEX_ReadData1,IDtoEX_ReadData2, // Read Data from Register File
     output reg [31:0] IDtoEX_Imm, // Sign extended immediate value
     output reg [4:0] IDtoEX_Rt, IDtoEX_Rd, // Destination Register
@@ -34,16 +32,13 @@ module IDtoEX_Register(
     // outputs to ALU control 
     output reg [5:0] ALUcontrol_funct, // Function code
     
-    
     // outputs to next pipe
-    output reg IDtoEX_Branch, IDtoEX_MemRead, IDtoEX_MemWrite,     // stage 4ÏóêÏÑú ÏÇ¨Ïö©
-    output reg IDtoEX_RegWrite, IDtoEX_MemtoReg      // stage 5ÏóêÏÑú ÏÇ¨Ïö©
-    
+    output reg IDtoEX_MemRead, IDtoEX_MemWrite,     // stage 4?óê?Ñú ?Ç¨?ö©
+    output reg IDtoEX_RegWrite, IDtoEX_MemtoReg      // stage 5?óê?Ñú ?Ç¨?ö©
     );
     
     always @ (posedge clk or posedge rst) begin
     if (rst) begin 
-        IDtoEX_PC <= 0;
         IDtoEX_ReadData1 <= 0;
         IDtoEX_ReadData2 <= 0;
         IDtoEX_Imm <= 0;
@@ -54,35 +49,26 @@ module IDtoEX_Register(
         EX_ALUOp <= 0;
         EX_ALUSrc <= 0;
         EX_RegDst <= 0;
-        
-        IDtoEX_Branch <= 0;
         IDtoEX_MemRead <= 0;
         IDtoEX_MemWrite <= 0;
         IDtoEX_RegWrite <= 0;
         IDtoEX_MemtoReg <= 0;
-        
     end
     else begin
-        IDtoEX_PC <= IFtoID_PC;
-        IDtoEX_ReadData1 <= IFtoID_ReadData1;
-        IDtoEX_ReadData2 <= IFtoID_ReadData2;
-        IDtoEX_Imm <= IFtoID_Imm;
-        IDtoEX_Rt <= IFtoID_Rt;
-        IDtoEX_Rd <= IFtoID_Rd;
-        
+        IDtoEX_ReadData1 <= ID_ReadData1;
+        IDtoEX_ReadData2 <= ID_ReadData2;
+        IDtoEX_Imm <= ID_Imm;
+        IDtoEX_Rt <= ID_Rt;
+        IDtoEX_Rd <= ID_Rd;
         EX_ALUOp <= ALUOp;
         EX_ALUSrc <= ALUSrc;
         EX_RegDst <= RegDst;
-        
-        Forwarding_Rs <= IFtoID_Rs;
+        Forwarding_Rs <= ID_Rs;
         ALUcontrol_funct <= funct;
-        
-        IDtoEX_Branch <= Branch;
         IDtoEX_MemRead <= MemRead;
         IDtoEX_MemWrite <= MemWrite;
         IDtoEX_RegWrite <= RegWrite;
         IDtoEX_MemtoReg <= MemtoReg;
-        
     end
   end
 endmodule
