@@ -1,22 +1,23 @@
 module DataMemoryUnit(
-    input wire clk,                // 클럭 신호
-    input wire memWrite,           // 메모리에 쓸지 여부
-    input wire memRead,            // 메모리에서 읽을지 여부
-    input wire [31:0] address,     // 메모리 주소
-    input wire [31:0] writeData,   // 메모리에 쓸 데이터
-    output reg [31:0] readData     // 메모리에서 읽은 데이터
+    input wire clk,
+    input wire memWrite,
+    input wire memRead,
+    input wire [31:0] address,
+    input wire [31:0] writeData,
+    output reg [31:0] readData
 );
 
-    reg [31:0] memory [0:1023];     // 1024개의 32비트 메모리 위치
+    reg [7:0] memory [0:1023];
 
     always @(posedge clk) begin
         if (memWrite) begin
-            // 메모리 쓰기 동작
-            memory[address] <= writeData;
+            memory[address] <= writeData[31:24];
+            memory[address + 1] <= writeData[23:16];
+            memory[address + 2] <= writeData[15:8];
+            memory[address + 3] <= writeData[7:0];
         end
         if (memRead) begin
-            // 메모리 읽기 동작
-            readData <= memory[address];
+            readData <= {memory[address], memory[address + 1], memory[address + 2], memory[address + 3]};
         end
     end
 

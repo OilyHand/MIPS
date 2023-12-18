@@ -32,9 +32,10 @@ module IF_Stage(
     
         ProgramCounter u1 (
             .clk(clk), .rst(rst),
+            .PCSrc(ID_PCSrc),
             .PCWriteValue(MuxtoPC),
             .PCWrite(PCWrite),
-            .pc(PCtoInst) // ì¤‘ê°„ ë³€ìˆ˜ì— ì—°ê²°
+            .pc(PCtoInst) // ì¤‘ê°„ ë³??ˆ˜?— ?—°ê²?
         );
     
     

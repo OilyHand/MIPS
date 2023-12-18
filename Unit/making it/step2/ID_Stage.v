@@ -3,22 +3,19 @@ module ID_Stage(
     input wire rst,
     input wire [31:0] IFtoID_PC,
     input wire [31:0] IFtoID_inst,
-    
     input wire [4:0] writeReg,
     input wire [31:0] writeData,
     input wire RegWrite,
     
-    output wire [31:0] IDtoEX_PC,
-    output wire [31:0] IDtoEX_ReadData1, IDtoEX_ReadData2,
+    output wire [31:0] IDtoEX_ReadData1, 
+    output wire [31:0] IDtoEX_ReadData2,
     output wire [31:0] IDtoEX_Imm,
     output wire [5:0] IFtoID_Op,    //31:26
     output wire [4:0] IFtoID_Rs,    //25:21
     output wire [4:0] IFtoID_Rt,    //20:16
     output wire [4:0] IFtoID_Rd,    //15:11
-  //output wire [25:0] jump_instruction //25:0
-    
-    
     output wire [5:0] funct,
+    output wire [31:0] Branch_Addr,
     output wire branch_equal,
     
     output wire [31:0] output_0, output_1, output_2, output_3, output_4, output_5, output_6, output_7, output_8,
@@ -26,7 +23,6 @@ module ID_Stage(
                        output_19, output_20, output_21, output_22, output_23, output_24, output_25, output_26, output_27, output_28,
                        output_29, output_30, output_31
 );
-
     // Register File
     wire [31:0] RD1, RD2, zero, at, v0, v1, a0, a1, a2, a3, t0, t1, t2, t3, t4, t5, t6, t7,
                 s0, s1, s2, s3, s4, s5, s6, s7, t8, t9, k0, k1, gp, sp, fp, ra;
@@ -35,7 +31,8 @@ module ID_Stage(
     wire WriteReg;
     
     wire [31:0] imm; // using sign extension
-   
+    wire [31:0] sll_out;
+    
     // Instruction Decode
     assign RR1 = IFtoID_inst[25:21];
     assign RR2 = IFtoID_inst[20:16];   
@@ -43,6 +40,9 @@ module ID_Stage(
     assign WD = writeData;
     assign WriteReg = RegWrite;
     
+    // calculate branch address
+    Shifting SHIFT (.Din(imm), .shamt(5'd2), .left(1'b1), .Dout(sll_out));
+    Adder ADD_addr (.operandA(IFtoID_PC), .operandB(sll_out), .sum(Branch_Addr));
     
     RegisterFile u0 (
         .RD1(RD1), .RD2(RD2),
@@ -59,16 +59,12 @@ module ID_Stage(
         .rst(rst)
     );
 
-
     SignExt u1 (
         .Y(imm),
         .X(IFtoID_inst[15:0])
     );
 
-
-    // Output
- 
-    assign IDtoEX_PC = IFtoID_PC;
+    // register file output
     assign IDtoEX_ReadData1 = RD1;
     assign IDtoEX_ReadData2 = RD2;
     assign IDtoEX_Imm = imm;

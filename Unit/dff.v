@@ -12,8 +12,9 @@
 module dff(
     output reg [31:0] Q,
     input [31:0] D,
-    input clk, En
+    input clk, En, rst
 );
-    always @(posedge clk)
-      if(En) Q <= D;
+    always @(posedge clk, posedge rst)
+      if(rst) Q <= 32'd0;
+      else if(En) Q <= D;
 endmodule
