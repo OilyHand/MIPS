@@ -28,7 +28,7 @@ module ID_Stage(
                 s0, s1, s2, s3, s4, s5, s6, s7, t8, t9, k0, k1, gp, sp, fp, ra;
     wire [4:0] RR1, RR2, WR;
     wire [31:0] WD;
-    wire WriteReg;
+    wire Control_RegWrite;
     
     wire [31:0] imm; // using sign extension
     wire [31:0] sll_out;
@@ -38,7 +38,7 @@ module ID_Stage(
     assign RR2 = IFtoID_inst[20:16];   
     assign WR = writeReg;
     assign WD = writeData;
-    assign WriteReg = RegWrite;
+    assign Control_RegWrite = RegWrite;
     
     // calculate branch address
     Shifting SHIFT (.Din(imm), .shamt(5'd2), .left(1'b1), .Dout(sll_out));
@@ -54,7 +54,7 @@ module ID_Stage(
         .RR2(RR2),
         .WR(WR),
         .WD(WD),
-        .WriteReg(WriteReg),
+        .WriteReg(Control_RegWrite),
         .clk(clk),
         .rst(rst)
     );
