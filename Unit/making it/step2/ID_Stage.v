@@ -65,8 +65,8 @@ module ID_Stage(
     );
 
     // register file output
-    assign IDtoEX_ReadData1 = RD1;
-    assign IDtoEX_ReadData2 = RD2;
+    assign IDtoEX_ReadData1 = (WR == RR1)? WD:RD1;
+    assign IDtoEX_ReadData2 = (WR == RR2)? WD:RD2;
     assign IDtoEX_Imm = imm;
     
     assign IFtoID_Op = IFtoID_inst[31:26];   
