@@ -1,19 +1,19 @@
 module ProgramCounter(
-    input wire clk,        // ?´?½ ?‹ ?˜¸
+    input wire clk,        // í´ë½ ì‹ í˜¸
     input wire rst,
-    input wire PCSrc,
-    input wire [31:0] PCWriteValue,  // PC?— ?“°?—¬ì§? ê°?
+    
+    input wire [31:0] PCWriteValue,  // PCì— ì“°ì—¬ì§ˆ ê°’
     input wire PCWrite,    // Control unit
     
-    output reg [31:0] pc    // ?˜„?¬ PC ê°?
+    output reg [31:0] pc    // í˜„ì¬ PC ê°’
 );
 
-    always @(posedge clk, posedge rst) begin
+    always @(posedge clk or posedge rst) begin
         if (rst == 1)
             pc <= 0;
     
-        else if (PCWrite)  // PCwrite Control unit?´ ?™œ?„±?™”?˜ë©?
-            pc <= PCWriteValue;  // ê·? ê°’ìœ¼ë¡? pc ?®?–´?“°ê¸?
+        else if (PCWrite)  // PCwrite Control unitì´ í™œì„±í™”ë˜ë©´
+            pc <= PCWriteValue;  // ê·¸ ê°’ìœ¼ë¡œ pc ë®ì–´ì“°ê¸°
     end
 
 endmodule
