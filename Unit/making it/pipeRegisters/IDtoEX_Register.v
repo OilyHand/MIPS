@@ -33,8 +33,8 @@ module IDtoEX_Register(
     output reg [5:0] ALUcontrol_funct, // Function code
     
     // outputs to next pipe
-    output reg IDtoEX_MemRead, IDtoEX_MemWrite,     // stage 4?óê?Ñú ?Ç¨?ö©
-    output reg IDtoEX_RegWrite, IDtoEX_MemtoReg      // stage 5?óê?Ñú ?Ç¨?ö©
+    output reg IDtoEX_MemRead, IDtoEX_MemWrite,     // stage 4?????? ??????
+    output reg IDtoEX_RegWrite, IDtoEX_MemtoReg      // stage 5?????? ??????
     );
     
     always @ (posedge clk or posedge rst) begin
