@@ -12,11 +12,10 @@ module MIPS (
                         Register_24, Register_25, Register_26, Register_27,
                         Register_28, Register_29, Register_30, Register_31,
     
-    //?””ë²„ê¹…
-    output wire [31:0] debug_RD1_stage2, debug_RD2_stage2,
-                       debug_ALUresult_stage3, debug_WBdata_stage5,
-    output wire [4:0] debug_RegDest_MEM, debug_RegDest_stage5,
-    output wire [1:0] debug_forwarding_A, debug_forwarding_B
+    output wire [31:0] memory_8, memory_12, memory_16, memory_20, 
+    
+    output wire [31:0] debug_1, debug_2, debug_3, debug_4,
+                       debug_5, debug_6, debug_7,debug_8, debug_9
     );
 
 //~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~*~*~*~*~*~*~*~~*~*~*~~*~*~*~~*~*~*~~*~*~*~*~~*~*~*~*
@@ -86,6 +85,7 @@ module MIPS (
     wire [31:0] MEM_ReadData_stage4;
     wire [31:0] ALUresult_MEM;
     wire [4:0] RegDest_MEM;
+    wire [31:0] memory8, memory12, memory16, memory20;
 
 
     // use U10 MEMWB_Register
@@ -161,9 +161,11 @@ module MIPS (
 
     Control U3 (
 //input
+        .rst(rst),
         .hazard_detected(hazard_stall),
         .opcode(Op_stage2),
         .branch_equal(branch_equal_stage2),
+        .IF_PC(pc_stage1),
 //output
         .ALUOp(Control_ALUOp),
         .ALUSrc(Control_ALUSrc),
@@ -289,11 +291,15 @@ module MIPS (
         .EXtoMEM_ReadData2(EXtoMEM_ReadData2_stage4),
         .EXtoMEM_RegDest(RegDest_stage4),
         .MemWrite(EXtoMEM_MemWrite),
-        .MemRead(IDtoEX_MemRead),
+        .MemRead(EXtoMEM_MemRead),
 //output
         .MEM_ReadData(MEM_ReadData_stage4),
         .MEM_ALU_result(ALUresult_MEM),
-        .MEM_RegDest(RegDest_MEM)
+        .MEM_RegDest(RegDest_MEM),
+        .output_memory8(memory8),
+        .output_memory12(memory12),
+        .output_memory16(memory16),
+        .output_memory20(memory20)
     );
     
     MEMtoWB_Register U10 (
@@ -359,13 +365,19 @@ module MIPS (
     assign Register_30 = fp;
     assign Register_31 = ra;
     
-    assign debug_RD1_stage2 = readData1_stage2;
-    assign debug_RD2_stage2 = readData2_stage2;
-    assign debug_ALUresult_stage3 = ALUresult_stage3;
-    assign debug_WBdata_stage5 = WriteData_stage5;
-    assign debug_RegDest_MEM = RegDest_MEM;
-    assign debug_RegDest_stage5 = RegDest_stage5;
-    assign debug_forwarding_A = ForwardA_wire;
-    assign debug_forwarding_B = ForwardB_wire;
+    assign memory_8 = memory8;
+    assign memory_12 = memory12;
+    assign memory_16 = memory16;
+    assign memory_20 = memory20;
+    
+    assign debug_1 = RegDest_stage5;
+    assign debug_2 = RegDest_MEM;
+    assign debug_3 = RegDest_stage3;
+    assign debug_4 = Rd_stage3;
+    assign debug_5 = Rd_stage2;
+    assign debug_6 = inst_stage2;
+    assign debug_7 = inst_stage1;
+    assign debug_8 = hazard_PCWrite;
+    assign debug_9 = pc_stage1;
 
 endmodule
