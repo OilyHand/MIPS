@@ -14,7 +14,10 @@ module MEM_Stage(
     // datapath output
     output wire [31:0] MEM_ReadData,
     output wire [31:0] MEM_ALU_result,
-    output wire [4:0] MEM_RegDest
+    output wire [4:0] MEM_RegDest,
+    
+    // memory output
+    output wire [31:0] output_memory8, output_memory12, output_memory16, output_memory20
 );
 
     // Data Memory
@@ -24,7 +27,9 @@ module MEM_Stage(
         .memRead(MemRead),
         .address(EXtoMEM_ALUresult),
         .writeData(EXtoMEM_ReadData2),
-        .readData(MEM_ReadData)
+        .readData(MEM_ReadData),
+        .memory8(output_memory8), .memory12(output_memory12),
+        .memory16(output_memory16), .memory20(output_memory20)
     );
 
     // select signal of PC source
