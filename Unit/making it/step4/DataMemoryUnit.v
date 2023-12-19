@@ -138,7 +138,7 @@ module DataMemoryUnit(
         memory[58] = 8'b00000000;
         memory[59] = 8'b00000110;    // sw $t0, 6($t0)
         //101011 01000 01000 0000000000000101 
-
+*/
     always @(negedge clk) begin
         if (memWrite)
             memory[address] <= writeData;
