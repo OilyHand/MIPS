@@ -2,28 +2,33 @@ module IFtoID_Register (
     input wire clk, rst,
     input wire [31:0] IF_PC, IF_inst,
     input wire IF_ID_Write, IF_Flush,
-    output reg [31:0] ID_PC, ID_inst
-);
-  wire [31:0] next_inst, next_PC;
-  
-  
-  always @ (posedge clk or posedge rst) begin
-    if (rst) begin
+    
+    output reg [31:0] ID_PC, ID_inst);
+ 
+ 
+    reg [31:0] prev_IF_PC;      //이전 값 저장
+    reg [31:0] prev_IF_inst;    //이전 값 저장
+ 
+ 
+  always @ (posedge clk or posedge rst or posedge IF_Flush) begin
+    if (rst || IF_Flush) begin
         ID_PC <= 0;
         ID_inst <= 0;
-    end    
+        prev_IF_PC <= 0;      //이전 값 저장
+        prev_IF_inst <= 0;
+    end
+    
     else begin
         if(IF_ID_Write) begin
-            ID_PC <= next_PC;
-            ID_inst <= next_inst;
+            ID_PC <= IF_PC;
+            ID_inst <= IF_inst;
         end
         else begin
-            ID_PC <= ID_PC;
-            ID_inst <= ID_inst;
+            ID_PC <= prev_IF_PC;
+            ID_inst <= prev_IF_inst;
         end
+      prev_IF_PC <= IF_PC;
+      prev_IF_inst <= IF_inst;
     end
   end
-
-  assign next_PC = (IF_Flush == 1) ? 32'd0 : IF_PC;
-  assign next_inst = (IF_Flush == 1) ? 32'd0 : IF_inst;
 endmodule
