@@ -13,6 +13,8 @@ module MIPS (
                         Register_28, Register_29, Register_30, Register_31,
     
     output wire [31:0] memory_8, memory_12, memory_16, memory_20, 
+
+    output wire sound,
     
     output wire [31:0] debug_1, debug_2, debug_3, debug_4,
                        debug_5, debug_6, debug_7,debug_8, debug_9
@@ -369,6 +371,8 @@ module MIPS (
     assign memory_12 = memory12;
     assign memory_16 = memory16;
     assign memory_20 = memory20;
+
+    assign sound = hazard_stall;
     
     assign debug_1 = RegDest_stage5;
     assign debug_2 = RegDest_MEM;
