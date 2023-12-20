@@ -5,7 +5,7 @@ module Hazard_Detection(
     );
     
     always @*
-        if(ID_EX_MemRead && (ID_EX_Rt == IF_ID_Rs) && (ID_EX_Rt == IF_ID_Rt)) begin
+        if(ID_EX_MemRead && ((ID_EX_Rt == IF_ID_Rs) || (ID_EX_Rt == IF_ID_Rt))) begin
             PCWrite = 0; IF_ID_Write = 0; Stall = 1; 
         end
         else begin 
