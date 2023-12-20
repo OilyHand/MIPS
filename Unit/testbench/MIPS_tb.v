@@ -7,6 +7,7 @@ wire [31:0] ProgramCounter_Output,
             s0, s1, s2, s3, s4, s5, s6, s7, t8, t9, k0, k1, gp, sp, fp, ra,
             m8, m12, m16, m20,
             d1, d2, d3, d4, d5, d6, d7, d8, d9;
+wire sound;
 
 MIPS uut (.clk(clk), .rst(rst), .ProgramCounter_Output(ProgramCounter_Output),
     .Register_0(zero), .Register_1(at), .Register_2(v0),  .Register_3(v1), 
@@ -19,6 +20,8 @@ MIPS uut (.clk(clk), .rst(rst), .ProgramCounter_Output(ProgramCounter_Output),
     .Register_28(gp), .Register_29(sp), .Register_30(fp), .Register_31(ra), 
     
     .memory_8(m8), .memory_12(m12), .memory_16(m16), .memory_20(m20), 
+    
+    .sound(sound),
     
     .debug_1(d1), .debug_2(d2), .debug_3(d3), .debug_4(d4),
     .debug_5(d5), .debug_6(d6), .debug_7(d7),
